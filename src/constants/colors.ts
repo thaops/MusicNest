@@ -7,5 +7,6 @@ export const colors = {
     violet:'#844DFB',
     blurBlue:'#2196F3',
     green:'#12B57A',
+    taskBar:'#110B20'
   };
   
