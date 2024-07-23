@@ -7,6 +7,8 @@ export const colors = {
     violet:'#844DFB',
     blurBlue:'#2196F3',
     green:'#12B57A',
-    taskBar:'#110B20'
+    taskBar:'#110B20',
+    press:'#844DFB',
+    card:'#2D2739'
   };
   
