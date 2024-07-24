@@ -8,8 +8,8 @@ export const globalStyles = StyleSheet.create({
         flex:1,
         backgroundColor:colors.bgColor,
         paddingTop: Platform.OS === 'ios'? 42:42,
-        paddingLeft:23,
-        paddingRight:23
+        paddingLeft:16,
+        paddingRight:16
     },
     row:{
     flexDirection:"row",
@@ -32,5 +32,16 @@ export const globalStyles = StyleSheet.create({
     tag:{
         padding:12,
         borderRadius:10
+    },
+    play:{
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 69,
+            width: 69,
+            borderRadius: 50,
+            backgroundColor: colors.decs,
+            borderWidth:1,
+            borderColor:colors.violet
+        
     }
 })

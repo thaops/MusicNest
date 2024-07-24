@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import SpaceComponent from './SpaceComponent';
@@ -7,21 +7,23 @@ import { colors } from '../constants/colors';
 
 
 interface Props{
-  dataList?:Array<{id?:string,uri?:string,title?:string}>
+  dataList?:Array<{id?:string,uri?:string,title?:string}>,
+  onPress: (item: { id?: string; uri?: string; title?: string }) => void;
 }
-const renderItem = ({ item }) => (
-  <View key={item.id} style={{}}>
-    <View style={styles.itemContainer} >
-      <Image source={{ uri: item.uri }} style={styles.image} />
-      <SpaceComponent width={6}/>
-      <Text style={[globalStyles.text, styles.title]}>{item.title}</Text>
-      <SpaceComponent width={6}/>
-  </View>
-  </View>
-);
+
 
 const ItemList = (props:Props) => {
-  const {dataList} = props
+  const {dataList,onPress} = props
+  const renderItem = ({ item  }) => (
+    <TouchableOpacity key={item.id} onPress={()=> onPress(item)} >
+      <View style={styles.itemContainer} >
+        <Image source={{ uri: item.uri }} style={styles.image} />
+        <SpaceComponent width={10}/>
+        <Text style={[globalStyles.text, styles.title]}>{item.title}</Text>
+        <SpaceComponent width={10}/>
+    </View>
+    </TouchableOpacity>
+  );
   return (
     <FlatList
       data={dataList}
@@ -39,13 +41,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: colors.gray,
+    backgroundColor: colors.card,
     margin:8, 
-    
   },
   image: {
     width: 56,
-    height: 56,
+    height: 56, 
     borderRadius: 5,
 
   },

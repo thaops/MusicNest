@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import ContainerComponent from '../components/ContainerComponent'
 import SectionComponent from '../components/SectionComponent'
@@ -27,7 +27,11 @@ const ChartsList = [
   { id: '4', uri: 'https://firebasestorage.googleapis.com/v0/b/mydreammusic-7f041.appspot.com/o/Image%2FAlbumImageHieuThuHai.png?alt=media&token=11701d91-526f-478b-be62-b569904efab7', song: 'Hôm nay Nghe gì', artist: 'HieuT2' },
 ];
 
-const HomeScreen = () => {
+
+const HomeScreen = ({navigation}) => {
+  const handlePress = (item) => {
+    navigation.navigate('ListSong', { item });
+  };
   return (
     
     <ContainerComponent >
@@ -35,7 +39,10 @@ const HomeScreen = () => {
             <RowComponent  justify='space-between'>
                 <View style={{flex:1, flexDirection:'row'}}>
                 <TextComponent text='For You' size={16} color={colors.press} font={fontFamilys.bold}/>
+                <TouchableOpacity onPress={() => navigation.navigate('MusicPlayer')}style={{flex:1}}>
                 <TextComponent text='Trending'/>
+                </TouchableOpacity>
+                
                 </View>
                 <View style={{flex:0.5,  flexDirection:'row', justifyContent:'flex-end'}}>
                 <Notification size="24" color={colors.decs}/>
@@ -45,7 +52,7 @@ const HomeScreen = () => {
             </RowComponent>
         </SectionComponent>
         <SectionComponent>
-            <ItemList dataList={imageList}/>
+            <ItemList dataList={imageList} onPress={handlePress}/>
         </SectionComponent>
         <SectionComponent>
         <CardComponent title="Artist" dataList={imageList} />
