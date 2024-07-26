@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useEffect } from 'react'
 import ContainerComponent from '../components/ContainerComponent'
 import SectionComponent from '../components/SectionComponent'
 import RowComponent from '../components/RowComponen'
@@ -11,6 +11,8 @@ import SpaceComponent from '../components/SpaceComponent'
 import ItemList from '../components/ItemList'
 import CardComponent from '../components/CardComponent'
 import ChartsComponent from '../components/ChartsComponent'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchItems } from '../slices/ItemHomNaySlices'
 
 
 const imageList = [
@@ -28,43 +30,60 @@ const ChartsList = [
 ];
 
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector((state: RootState) => state.itemHomnay || { data: [], loading: false, error: null });
+
+  useEffect(() => {
+    console.log('Fetched data:', data);
+  }, [data]);
+  
+  useEffect(() => {
+    dispatch(fetchItems());
+  }, [dispatch]);
+
   const handlePress = (item) => {
     navigation.navigate('ListSong', { item });
   };
+
   return (
-    
-    <ContainerComponent >
-        <SectionComponent>
-            <RowComponent  justify='space-between'>
-                <View style={{flex:1, flexDirection:'row'}}>
-                <TextComponent text='For You' size={16} color={colors.press} font={fontFamilys.bold}/>
-                <TouchableOpacity onPress={() => navigation.navigate('MusicPlayer')}style={{flex:1}}>
-                <TextComponent text='Trending'/>
-                </TouchableOpacity>
-                
-                </View>
-                <View style={{flex:0.5,  flexDirection:'row', justifyContent:'flex-end'}}>
-                <Notification size="24" color={colors.decs}/>
-                <SpaceComponent width={16}/>
-                <Setting size="24" color={colors.decs}/>
-                </View>
-            </RowComponent>
-        </SectionComponent>
-        <SectionComponent>
-            <ItemList dataList={imageList} onPress={handlePress}/>
-        </SectionComponent>
-        <SectionComponent>
+    <ContainerComponent>
+      <SectionComponent>
+        <RowComponent justify='space-between'>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <TextComponent text='For You' size={16} color={colors.press} font={fontFamilys.bold} />
+            <TouchableOpacity onPress={() => navigation.navigate('MusicPlayer')} style={{ flex: 1 }}>
+              <TextComponent text='Trending' />
+            </TouchableOpacity>
+          </View>
+          <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <Notification size="24" color={colors.decs} />
+            <SpaceComponent width={16} />
+            <Setting size="24" color={colors.decs} />
+          </View>
+        </RowComponent>
+      </SectionComponent>
+      <SectionComponent>
+        {loading ? (
+          <ActivityIndicator size="large" color={colors.press} />
+        ) : error ? (
+          <Text style={styles.errorText}>Error: {error}</Text>
+        ) : (
+          <ItemList dataList={data} onPress={handlePress} />
+        )}
+      </SectionComponent>
+      <SectionComponent>
         <CardComponent title="Artist" dataList={imageList} />
-        </SectionComponent>
-        <SectionComponent>
+      </SectionComponent>
+      <SectionComponent>
         <CardComponent title="Album" dataList={imageList} />
-        </SectionComponent>
-       <SectionComponent>
-        <ChartsComponent dataCharts={ChartsList}/>
-       </SectionComponent>
+      </SectionComponent>
+      <SectionComponent>
+        <ChartsComponent dataCharts={ChartsList} />
+      </SectionComponent>
     </ContainerComponent>
-  )
-}
+  );
+};
+
 
 export default HomeScreen

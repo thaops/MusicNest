@@ -1,4 +1,5 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text } from 'react-native'
+import { ScrollView } from 'react-native-virtualized-view'
 import React, { ReactNode } from 'react'
 import { globalStyles } from '../styles/globalStyles'
 
