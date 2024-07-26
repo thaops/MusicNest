@@ -9,13 +9,13 @@ interface Props {
   children?: ReactNode,
   title?: string,
   customStyles?: StyleProp<ViewStyle>,
-  dataList: Array<{ id: string, uri: string, title: string }>,
+  dataList: Array<{ _id: string, Image: string, title: string }>,
 }
 
 
 const renderItem = ({ item }) => (
   <View key={item.id} style={styles.itemContainer}>
-    <Image source={{ uri: item.uri }} style={styles.image} />
+    <Image source={{ uri: item.Image }} style={styles.image} />
     <SpaceComponent height={6}/>
     <TextComponent text={item.title} size={12}/>
   </View>

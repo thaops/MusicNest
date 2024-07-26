@@ -13,6 +13,9 @@ import CardComponent from '../components/CardComponent'
 import ChartsComponent from '../components/ChartsComponent'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchItems } from '../slices/ItemHomNaySlices'
+import { fetchArtists } from '../slices/ArtistSlice'
+import { fetchAlbums } from '../slices/AlbumSlice'
+import { fetchNewListSongs } from '../slices/NewListSong'
 
 
 const imageList = [
@@ -33,13 +36,21 @@ const ChartsList = [
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state: RootState) => state.itemHomnay || { data: [], loading: false, error: null });
+  const artistState = useSelector((state: RootState) => state.Artist || { data: [], loading: false, error: null });
+  const AlbumState = useSelector((state: RootState) => state.Album || { data: [], loading: false, error: null });
+  const Top5State = useSelector((state: RootState) => state.NewListSong || { data: [], loading: false, error: null });
 
   useEffect(() => {
-    console.log('Fetched data:', data);
-  }, [data]);
-  
+    dispatch(fetchArtists());
+  }, [dispatch]);
   useEffect(() => {
     dispatch(fetchItems());
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchAlbums());
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchNewListSongs());
   }, [dispatch]);
 
   const handlePress = (item) => {
@@ -73,14 +84,15 @@ const HomeScreen = ({ navigation }) => {
         )}
       </SectionComponent>
       <SectionComponent>
-        <CardComponent title="Artist" dataList={imageList} />
+        <CardComponent title="Artist" dataList={artistState.data} />
       </SectionComponent>
       <SectionComponent>
-        <CardComponent title="Album" dataList={imageList} />
+        <CardComponent title="Album" dataList={AlbumState.data} />
       </SectionComponent>
       <SectionComponent>
-        <ChartsComponent dataCharts={ChartsList} />
+        <ChartsComponent dataCharts={Top5State.data} />
       </SectionComponent>
+      <SpaceComponent height={30}/>
     </ContainerComponent>
   );
 };

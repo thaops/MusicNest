@@ -10,6 +10,8 @@ import TextComponent from './TextComponent';
 import SpaceComponent from '../components/SpaceComponent'
 import SectionComponent from './SectionComponent';
 import { fontFamilys } from '../constants/fontFamily';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNewListSongs } from '../slices/NewListSong';
 
 interface Song {
     song: string;
@@ -28,6 +30,7 @@ const PlayCommponent: React.FC<Props> = ({ songList }: Props) => {
     const [currentTime, setCurrentTime] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
     const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
+
 
     useEffect(() => {
         Sound.setCategory('Playback');
@@ -130,7 +133,7 @@ const PlayCommponent: React.FC<Props> = ({ songList }: Props) => {
             <SectionComponent>
                 <ImageSong UrlImageSong={songList[currentSongIndex].Image} />
             </SectionComponent>
-
+            <SpaceComponent height={10} />
             <SectionComponent>
                 <RowComponent justify='space-between' styles={{ alignItems: 'flex-start' }}>
                     <View>
@@ -140,7 +143,7 @@ const PlayCommponent: React.FC<Props> = ({ songList }: Props) => {
                     <Heart size="32" color={colors.violet} />
                 </RowComponent>
             </SectionComponent>
-            <SpaceComponent height={10} />
+            <SpaceComponent height={20} />
             <SeekBarComponent
                 duration={duration}
                 currentTime={currentTime}

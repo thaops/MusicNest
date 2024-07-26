@@ -10,7 +10,7 @@ import SpaceComponent from './SpaceComponent';
 
 interface Props {
     title?: string,
-    dataCharts?:Array<{id:string, uri:string,song:string, artist: string}>
+    dataCharts?:Array<{id:string, Image:string,song:string, title: string,nameSong:string}>
 }
 
 
@@ -19,10 +19,10 @@ const renderItem = ({ item }) => (
     <View key={item.id} style={styles.itemContainer}>
         <RowComponent justify='space-between'>
             <RowComponent justify='flex-start'>
-                <Image source={{ uri: item.uri }} style={styles.image} />
+                <Image source={{ uri: item.Image }} style={styles.image} />
                 <View>
-                    <TextComponent text={item.song} size={10} styles={{ marginLeft: 10 }} font={fontFamilys.bold} />
-                    <TextComponent text={item.artist} size={10} styles={{ marginLeft: 10 }} />
+                    <TextComponent text={item.nameSong} size={10} styles={{ marginLeft: 10 }} font={fontFamilys.bold} />
+                    <TextComponent text={item.title} size={10} styles={{ marginLeft: 10 }} />
                 </View>
             </RowComponent>
             <ArrowSquareDown size="24" color={colors.violet} />
