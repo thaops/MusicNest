@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { API } from '../../API';
 
 interface ItemState {
   data: any[];
@@ -18,7 +19,7 @@ export const fetchItems = createAsyncThunk(
   'itemHomnay/fetchItems',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://192.168.1.177:3000/itemsHomnay');
+      const response = await axios.get(`${API}/itemsHomnay`);
       return response.data;  
     } catch (error) {
       return rejectWithValue(error.response.data);

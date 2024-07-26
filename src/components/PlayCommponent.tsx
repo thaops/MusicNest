@@ -1,20 +1,28 @@
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Sound from 'react-native-sound';
-import SeekBarComponent from './SeekBarComponent';  // Điều chỉnh đường dẫn import nếu cần
+import SeekBarComponent from './SeekBarComponent';
 import RowComponent from './RowComponen';
-import { Back, Next, Pause, Play, Previous, Repeat } from 'iconsax-react-native';
+import { Back, Heart, Next, Pause, Play, Previous, Repeat } from 'iconsax-react-native';
 import { colors } from '../constants/colors';
-import SpaceComponent from './SpaceComponent';
+import ImageSong from './ImageSong';
+import TextComponent from './TextComponent';
+import SpaceComponent from '../components/SpaceComponent'
+import SectionComponent from './SectionComponent';
+import { fontFamilys } from '../constants/fontFamily';
 
-interface Props{
-    songList?:string[],
+interface Song {
+    song: string;
+    title: string;
+    Image: string;
+    nameSong: string;
 }
 
+interface Props {
+    songList: Song[];
+}
 
-
-const PlayCommponent = (props:Props) => {
-    const {songList} = props
+const PlayCommponent: React.FC<Props> = ({ songList }: Props) => {
     const [sound, setSound] = useState<Sound | null>(null);
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [currentTime, setCurrentTime] = useState<number>(0);
@@ -31,9 +39,9 @@ const PlayCommponent = (props:Props) => {
                 sound.getCurrentTime((seconds) => {
                     setCurrentTime(seconds);
                 });
-            }, 1000); 
+            }, 100);
 
-            return () => clearInterval(interval); 
+            return () => clearInterval(interval);
         }
     }, [sound, isPlaying]);
 
@@ -53,7 +61,7 @@ const PlayCommponent = (props:Props) => {
                     Alert.alert('Error', 'Failed to load the sound');
                     return;
                 }
-                newSound.getDuration((duration) => setDuration(duration)); 
+                newSound.getDuration((duration) => setDuration(duration));
                 console.log('Sound loaded');
                 setSound(newSound);
                 newSound.play((success) => {
@@ -85,7 +93,7 @@ const PlayCommponent = (props:Props) => {
                 setIsPlaying(true);
             }
         } else {
-            loadSound(songList[currentSongIndex]);
+            loadSound(songList[currentSongIndex].song);
         }
     };
 
@@ -103,7 +111,7 @@ const PlayCommponent = (props:Props) => {
         if (currentSongIndex < songList.length - 1) {
             const nextIndex = currentSongIndex + 1;
             setCurrentSongIndex(nextIndex);
-            loadSound(songList[nextIndex]);
+            loadSound(songList[nextIndex].song);
         }
     };
 
@@ -111,23 +119,39 @@ const PlayCommponent = (props:Props) => {
         if (currentSongIndex > 0) {
             const prevIndex = currentSongIndex - 1;
             setCurrentSongIndex(prevIndex);
-            loadSound(songList[prevIndex]);
+            loadSound(songList[prevIndex].song);
         }
     };
 
     return (
         <View>
+
+            <SpaceComponent height={30} />
+            <SectionComponent>
+                <ImageSong UrlImageSong={songList[currentSongIndex].Image} />
+            </SectionComponent>
+
+            <SectionComponent>
+                <RowComponent justify='space-between' styles={{ alignItems: 'flex-start' }}>
+                    <View>
+                        <TextComponent text={songList[currentSongIndex].nameSong} size={20} font={fontFamilys.bold} />
+                        <TextComponent text={songList[currentSongIndex].title} size={14} />
+                    </View>
+                    <Heart size="32" color={colors.violet} />
+                </RowComponent>
+            </SectionComponent>
+            <SpaceComponent height={10} />
             <SeekBarComponent
                 duration={duration}
                 currentTime={currentTime}
                 onSeek={handleSeek}
             />
-            <SpaceComponent height={10}/>
-            <RowComponent justify='space-between' >
-                <Repeat size="32" color={colors.violet} variant="Bold"/>
-                <RowComponent justify='space-evenly'styles={{flex:1}}>
+            <SpaceComponent height={10} />
+            <RowComponent justify='space-between'>
+                <Repeat size="32" color={colors.violet} variant="Bold" />
+                <RowComponent justify='space-evenly' styles={{ flex: 1 }}>
                     <TouchableOpacity onPress={playPreviousSong}>
-                        <Previous size="32" color= {colors.violet} variant="Bold"/>
+                        <Previous size="32" color={colors.violet} variant="Bold" />
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={playSound}
@@ -138,14 +162,14 @@ const PlayCommponent = (props:Props) => {
                             width: 69,
                             borderRadius: 50,
                             backgroundColor: colors.decs,
-                            borderWidth:1,
-                            borderColor:colors.violet
+                            borderWidth: 1,
+                            borderColor: colors.violet
                         }}
                     >
                         {isPlaying ? <Pause size="32" color={colors.violet} /> : <Play size="32" color={colors.violet} />}
                     </TouchableOpacity>
                     <TouchableOpacity onPress={playNextSong}>
-                        <Next size="32" color={colors.violet} variant='Bold'/>
+                        <Next size="32" color={colors.violet} variant='Bold' />
                     </TouchableOpacity>
                 </RowComponent>
                 <Back size="32" color={colors.violet} />
