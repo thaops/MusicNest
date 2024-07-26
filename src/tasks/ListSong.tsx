@@ -1,5 +1,5 @@
 // src/screens/ListSong.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, FlatList, StyleSheet, ImageComponent, TouchableOpacity } from 'react-native';
 import ContainerComponent from '../components/ContainerComponent';
 import SectionComponent from '../components/SectionComponent';
@@ -11,22 +11,30 @@ import TextComponent from '../components/TextComponent';
 import { fontFamilys } from '../constants/fontFamily';
 import { colors } from '../constants/colors';
 import { globalStyles } from '../styles/globalStyles';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchListSongs } from '../slices/ListSongSlices';
 
-const ChartsList = [
-  { id: '1', uri: 'https://firebasestorage.googleapis.com/v0/b/mydreammusic-7f041.appspot.com/o/Image%2FAlbumImageHieuThuHai.png?alt=media&token=11701d91-526f-478b-be62-b569904efab7', song: 'Hôm nay Nghe gì', artist: 'HieuT2', uriSong: 'https://firebasestorage.googleapis.com/v0/b/mydreammusic-7f041.appspot.com/o/Music%2FExitSign.mp3?alt=media&token=65f993a8-c0d8-4058-b019-87bfa45a30b0', },
-  { id: '2', uri: 'https://firebasestorage.googleapis.com/v0/b/mydreammusic-7f041.appspot.com/o/Image%2FAlbumImageHieuThuHai.png?alt=media&token=11701d91-526f-478b-be62-b569904efab7', song: 'Hôm nay Nghe gì', artist: 'HieuT2', uriSong: 'https://firebasestorage.googleapis.com/v0/b/mydreammusic-7f041.appspot.com/o/Music%2FExitSign.mp3?alt=media&token=65f993a8-c0d8-4058-b019-87bfa45a30b0', },
-  { id: '3', uri: 'https://firebasestorage.googleapis.com/v0/b/mydreammusic-7f041.appspot.com/o/Image%2FAlbumImageHieuThuHai.png?alt=media&token=11701d91-526f-478b-be62-b569904efab7', song: 'Hôm nay Nghe gì', artist: 'HieuT2', uriSong: 'https://firebasestorage.googleapis.com/v0/b/mydreammusic-7f041.appspot.com/o/Music%2FExitSign.mp3?alt=media&token=65f993a8-c0d8-4058-b019-87bfa45a30b0', },
-  { id: '4', uri: 'https://firebasestorage.googleapis.com/v0/b/mydreammusic-7f041.appspot.com/o/Image%2FAlbumImageHieuThuHai.png?alt=media&token=11701d91-526f-478b-be62-b569904efab7', song: 'Hôm nay Nghe gì', artist: 'HieuT2', uriSong: 'https://firebasestorage.googleapis.com/v0/b/mydreammusic-7f041.appspot.com/o/Music%2FExitSign.mp3?alt=media&token=65f993a8-c0d8-4058-b019-87bfa45a30b0', },
-];
 
-const ListSong = ({navigation}:any) => {
+const ListSong = ({route,navigation}:any) => {
+  const { id } = route.params;
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector((state: any) => state.ListSong || { data: [], loading: false, error: null });
+  console.log('Data from store:', data);
+  useEffect(()=>{
+    if(id){
+      dispatch(fetchListSongs(id));
+    }
+  },[id,dispatch])
+  const handlePressSong = (item) => {
+    navigation.navigate('MusicPlayer', { song: item });
+  };
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('MusicPlayer')} style={styles.itemContainer}>
+    <TouchableOpacity onPress={()=>handlePressSong(item)} style={styles.itemContainer}>
       <RowComponent>
-        <Image source={{ uri: item.uri }} style={styles.image} />
+        <Image source={{ uri: item.Image }} style={styles.image} />
         <View style={styles.textContainer}>
-          <TextComponent text={item.song} size={16} font={fontFamilys.bold} />
-          <TextComponent text={item.artist} size={14} color={colors.gray} />
+          <TextComponent text={item.title} size={16} font={fontFamilys.bold} />
+          <TextComponent text={item.nameSong} size={14} color={colors.gray} />
         </View>
         <Heart size="24" color={colors.violet} />
       </RowComponent>
@@ -65,7 +73,7 @@ const ListSong = ({navigation}:any) => {
         </RowComponent>
       </SectionComponent>
       <FlatList
-        data={ChartsList}
+        data={data}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}

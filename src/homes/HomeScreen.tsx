@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
   }, [dispatch]);
 
   const handlePress = (item) => {
-    navigation.navigate('ListSong', { item });
+    navigation.navigate('ListSong', { id: item._id });
   };
 
   return (
